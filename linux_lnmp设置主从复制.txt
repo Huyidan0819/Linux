@@ -1,0 +1,49 @@
+linux centos7 lnmp 设置主从复制（读写分离） 
+
+什么叫主从复制：
+	通过在主服务器和从服务器之间切分处理客户查询的负荷，
+	可以得到更好的客户响应时间; 读写分离，就是“写”的操作都在主数据库，
+	“读”的操作都在从数据库！
+优点：
+	数据库备份、读写分离
+主从复制工作原理：
+	配置主从结构先在主上打开一个二进制日志的文件(Binary.log),在master写操作时,就会把写的命令存入
+	到这个二进制文件中(insert,update,delete)， slave开启一个IO线程,线程定时读取主节点的二进制文件
+	,将新的命令抓取过来，存放到本地一个中继日志中(relay.log);slave上还有一个定时启动的线程叫sql,
+	监控本地的中继日志, 一旦有新的命令发现,将会把中继日志中的命令执行一遍。这样一来,主从结构
+	就完成了数据的备份。
+
+关闭防火墙
+systemctl stop firewalld.service
+
+#主服务器配置
+	1、修改主服务器上：/etc/my.cnf
+	server-id = 1 (主服务器id，不能相同)
+	log-bin = mysql-bin  #主从服务的核心
+	
+	【#添加下面这一行，其他不变
+	--》binlog-do-db=test//（需要同步的数据库名称），如果没有本行，即表示同步所有的数据库
+	】
+	binlog-ignore-db=mysql //被忽略的数据库
+	
+
+	重启:lnmp restart	
+
+	2、在主服务器创建一个专门用来同步的用户---》依次执行
+	GRANT REPLICATION SLAVE ON *.* TO '新用户名'@'你的从服务器ip' IDENTIFIED BY '你的密码';
+	show master status;// 等着
+		会出现：file   			 position    		  Binlog_Do_Db
+			mysql-bin.000013	 开始位置           同步的数据库名称 	
+#、从服务器
+	1、修改从服务器上：/etc/my.cnf
+	server-id = 138  //(从服务器id，不能相同)
+	2、设置从服务
+	CHANGE MASTER TO MASTER_HOST='主服务器ip',MASTER_USER='刚才设置的新用户',
+	MASTER_PASSWORD='密码',MASTER_LOG_FILE='上面的file',MASTER_LOG_POS=上面的position;   
+	3、
+	start slave  #开启从服务
+	show slave status\G #查看从服务状态 
+	重启:lnmp restart	
+	4、出现
+		Slave_IO_Running:Yes
+		Slave_SQL_Running:yes
