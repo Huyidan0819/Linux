@@ -1,0 +1,53 @@
+
+
+测试test
+
+在~/ 创建test.php
+编辑 test.php :
+<?php
+	date_default_timezone_set("PRC");
+	file_put_contents('test.log',date("Y-m-d H:i:s").PHP_EOL,FILE_APPEND);
+?>
+执行 /usr/local/php/bin/php test.php    (test.php可以随意放在其他目录，执行时.php文件是，只需要用php安装目录去执行该文件)
+
+设置定期任务
+	crontab -e   ----- -e代表(编辑)
+	文件内容如下：
+	//分 时 日 月 周
+	//* * * * * /usr/local/php/bin/php test.php
+	//具体用法
+	百度
+
+服务操作说明：
+/sbin/service crond start //启动服务
+/sbin/service crond stop //关闭服务
+/sbin/service crond restart //重启服务
+/sbin/service crond reload //重新载入配置
+
+查看crontab服务状态：service crond status
+
+手动启动crontab服务：service crond start
+
+1．命令格式：
+crontab [-u user] file
+crontab [-u user] [ -e | -l | -r ]
+-u user：用来设定某个用户的crontab服务，例如，“-u ixdba”表示设定ixdba用户的crontab服务，
+	此参数一般有root用户来运行。
+
+file：file是命令文件的名字,表示将file做为crontab的任务列表文件并载入crontab。
+如果在命令行中没有指定这个文件，crontab命令将接受标准输入（键盘）上键入的命令，并将它们载入crontab。
+
+-e：编辑某个用户的crontab文件内容。如果不指定用户，则表示编辑当前用户的crontab文件。
+
+-l：显示某个用户的crontab文件内容，如果不指定用户，则表示显示当前用户的crontab文件内容。
+
+-r：从/var/spool/cron目录中删除某个用户的crontab文件，如果不指定用户，则默认删除当前用户的crontab文件。
+
+-i：在删除用户的crontab文件时给确认提示。
+
+添加一条任务：
+	crontab -e  里面加上一条任务
+删除一条任务
+	crontab -e 在任务前面加上#
+查看定时任务;
+	crontab -l
