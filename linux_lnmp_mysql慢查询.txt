@@ -1,0 +1,40 @@
+慢查询日志:
+	是MySQL数据库提供一种记录所有执行时间超过指定时间的SQL语句，然后我们可以通过日志里的SQL语句进行分析、优化。通俗的点说，
+	就是开启慢查询日志，我们就可以定位到有性能瓶颈的地方，进而进行优化。
+
+先查看一下你的慢查询日志的配置信息：
+	 show variables like 'slow_query%';
+
+ 	show variables like 'long_query_time';
+
+配置慢查询日志:
+	Linux下一般在/etc/my.cnf。开启慢查询日志功能，同时设置慢查询日志文件的路径以及时间限制
+	在/etc/my.cnf中添加下面三行
+	slow_query_log = ON	//慢查询状态
+	slow_query_log_file = /usr/local/mysql/data/slow.log	//慢查询日志存放的位置。如果修改注意【给权限 ：chmod -R 777 data/】用来写入
+	long_query_time = 1	// 查询超过多少秒才记录日志
+
+准备测试SQL
+	select sleep(2);
+查看日志信息
+	vi  /usr/local/mysql/data/slow.log
+
+	/usr/local/mysql/bin/mysqld, Version: 5.5.60-log (Source distribution). started with:
+Tcp port: 3306  Unix socket: /tmp/mysql.sock
+	
+Time                 Id Command    Argument
+
+	# Time: 190420 10:09:28		Time 执行慢查询语句的服务器时间
+	
+# User@Host: root[root] @ localhost []		User@Host 执行慢查询语句的用户
+	
+# Query_time: 2.001059  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0	Query_time 表示慢查询语句执行用了多少时间
+	
+use my_test;
+	
+SET timestamp=1555726168;
+	SET timestamp 将信息写入日志的时间戳
+	select sleep(2);		执行的sql 语句
+	
+
+
