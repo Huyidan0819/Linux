@@ -1,0 +1,181 @@
+vi进入编辑模式
+1、vi 文件名 
+2、i键 进入 insert 编辑模式
+3、ESC退出编辑模式  进入命令模式
+4、shift :  回到命令模式   
+5、wq! 强制写入并推出
+
+【不管是重启系统还是关闭系统，首先要运行sync命令，把内存中的数据写到磁盘中】
+
+关机的命令有
+	shutdown -h now, 
+	halt,
+	poweroff 和 
+	init 0 , 
+重启系统的命令
+	shutdown -r now, 
+	reboot, 
+	init 0.
+常用命令：
+	2、ls 
+	3、pwd 查询当前目录
+	4、cd  进入目录
+	5、reboot  重启
+	6、clear   清屏
+	7、ping  www.baidu.com   检测网络是否畅通
+	8、systemctl restart network.service  重启网络
+	9、 ifconfig   、  ip addr   查看当前主机的ip地址
+	10、shutdown now  关机
+	11、rm -rf fileName 删除file or dir
+	## 常用命令 2
+	- cd 进入指定目录 
+	- cd ~   回到家目录
+	- cd -   快速回到最近一次目录切换
+	- cd ..  回到上一级目录  cd ../../../
+	- mkdir  -p 递归创建
+	- rmdir  删除空目录
+	- rm -rf  删除文件或目录
+	- cp  拷贝 拷贝+重命名
+	- mv   剪切移动  重命名
+	- echo 'wen' > / >>  文件名  写入
+	- cat 查看
+	- tail -f fileName 动态查看文件
+	- tree 查看目录树
+	- yum -y install 安装包名称 
+	- man 查看一个命令的说明
+	- ln -s 
+	- tac 倒序查看
+	- more 分屏查看
+	- less
+	- head -n  查看前几行
+	- tail -n 后几行   -f : 动态显示文件的最后十行
+【网络静态配置】
+	1、进入网络配置文件
+		vi /etc/sysconfig/network-scripts/ifcfg-ens33
+	2、修改并且增加
+		改：dhcp = static
+			onboot = yes
+		增：
+		   IPADDR=静态ip   192.168.184.200
+		   GATEWAY=网关    192.168.184.2
+		   NETMASK=255.255.255.0
+		   DNS1=202.96.134.133
+	3、重启网卡
+		systemctl restart netwok.service =>!sys
+	4、检查网络状态
+		ping www.baidu.com
+
+ 【文件以及目录操作】
+	==》查看
+		pwd---查看当前目录
+		目录- ll / ls -ld  /ls
+		文件- 
+			cat -n text1 text2          　　  依次显示text1，text2内容,-n显示行号
+			cat text1 text2 > text       　　 t1和t2内容写入t
+			more text            显示长文本内容
+			ls -a                显示隐藏文件
+			ls -l                显示文件详情
+			ls –R		-R 参数叫作递归选项，它列出了当前目录下包含的子目录中的文件。如果目录很多，输出会很长。
+	==》编辑文件
+		 vi fielName  / vim fielName 
+		 set number  显示行数
+	==》查询
+		组  - tail -n5 /etc/group
+		用户- tail -n5 /etc/passwd
+		文件- find 文件路径 -name 文件名*
+				whereis fileName
+	==》创建
+	 	组  - groupadd groupName
+		用户- [
+				useradd -ggroupName username;echo "userpassword" | passwd --stdin username 增加用户并且分组+设置密码 
+				useradd userName
+			]
+	==》权限
+		更改fiel or dir的所有者 ---》 chown ownName fielName
+		更改fiel or dir的所有组 ---》 chgrp groupName fielName
+		 421  421  421 
+		(rwx  rwx  rwx)
+		【rwx】分别在目录和文件中表示
+			r  目录  ls         文件 cat vi more
+			w  目录  创建文件   文件 vi 
+			x  目录  进入目录   文件 执行
+
+		更改file or dir的权限   ---》 chmod 770 fileName
+									  chmod -R 770 fileName(修改当前文件目录下的所有文件都设置为该权限)
+		
+
+压缩打包 tar -cvfz test.tar.gz  文件或目录
+解压缩   tar -zxvf test.tar.gz
+
+【源代码安装】
+“-z” : 同时用gzip压缩
+
+“-j” : 同时用bzip2压缩
+
+“-x” : 解包或者解压缩
+
+“-t” : 查看tar包里面的文件
+
+“-c” : 建立一个tar包或者压缩文件包
+
+“-v” : 可视化
+
+“-f” : 后面跟文件名，压缩时跟 “-f 文件名”，意思是压缩后的文件名为filename, 
+解压时跟 “-f 文件名”，意思是解压filename. 请注意，如果是多个参数组合的情况下带有 “-f”，请把 “-f” 写到最后面。
+
+6、查看进程
+	例：ps -aux | grep memcached
+		ps -ef | grep redis
+
+7、使用memcache
+http://www.runoob.com/memcached/memcached-connection.html
+telnet 127.0.0.1 11211     连接本地主机的11211端口
+
+[查看ip]
+ip addr 
+ifconfig 
+
+【安装网络工具】 
+yum -y install net-tools
+
+命令模式 :/搜索的关键字
+1 yy p
+
+【防火墙操作】
+systemctl stop firewalld 禁用
+systemctl start firewalld 启动
+systemctl status firewalld 查看状态
+syetemctl disable firewalld 停止
+
+[查看一个进程] 
+ps -aux | grep nginx  【例：ps -aux | grep memcached】
+
+查看一个服务有几个端口。比如要查看mysqld
+ps -ef |grep mysqld
+
+ps -anp | grep 端口	
+查看一个端口的使用情况	【netstat -lnp | grep 80】
+
+
+
+【安装环境部分】
+
+常用命令 ：
+ 例：./configure --prefix=/usr/local/libevent-2.0.21-stable   安装前配置 --prefix指明安装目录
+
+
+
+
+
+
+
+
+
+
+	   
+	
+
+
+
+
+

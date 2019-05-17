@@ -1,0 +1,208 @@
+﻿Linux系统分区 两大分区
+
+/ 根空间
+swap  交换分区   物理内存*2
+
+【boot】 系统启动文件
+【etc】所有服务配置相关的文件
+
+快捷键
+Tab  补全命名
+
+1、cd  进入指定目录
+2、pwd  获取当前位置
+3、ls 查看当前目录下 所有的目录或文件
+   - 紫色 目录
+   - 白色 文件
+4、vi  编辑文件
+5、reboot  重启
+6、clear   清屏
+7、ping     检测网络是否畅通
+8、systemctl restart network.service  重启网络
+9、ip addr   查看当前主机的ip地址
+10、shutdown now  关机
+   
+   
+   
+【配置ip】
+ifcfg-ens33  本地网络
+ifcfg-lo     回环地址 localhost   127.0.0.1
+
+如何编辑一个文件
+1、vi 文件名 
+2、i键 进入 insert 编辑模式
+3、ESC退出编辑模式  进入命令模式
+4、shift+:   
+5、wq!
+6、set number  显示行数
+
+
+## 常用命令
+- cd 指定目录
+- cd ~   回到家目录
+- cd -   快速回到最近一次目录切换
+- cd ..  回到上一级目录  cd ../../../
+
+
+- mkdir  -p 递归创建
+- rmdir  删除空目录
+- rm -rf  删除文件或目录
+- cp  拷贝 拷贝+重命名
+- mv   剪切移动  重命名
+- echo 'wen' > / >>  文件名  写入
+- cat 查看
+- tree
+- yum install 
+- man 查看一个命令的说明
+- ln -s 
+
+- tac 倒序查看
+- more 分屏查看
+- less
+- head -n  查看前几行
+- tail -n 后几行   -f : 动态显示文件的最后十行
+
+- useradd a1
+- passwd a1 给账户创建密码
+
+
+ls 查看当前目录下 所有的目录或文件
+
+ls -l => ll
+ls -a  查看包含隐藏文件
+
+-rw-r--r--. 1 root root 48833145 9月  13 2017 mysql-boost-5.7.20.tar.gz
+
+- 文件类型 普通文件
+d 目录
+l 软链接
+rw-     r--      r--
+所有者  所属组   其他人
+user   group    other
+
+useradd a1
+passwd a1 给账户创建密码
+
+- 修改一个文件的所有者
+
+chown a1 daniu.html
+
+- 修改一个文件的所属组
+
+chgrp 组名  文件 
+
+- 给daniu.html的所有者添加读写权限
+
+chmod u+r daniu.html
+chmod u+w daniu.html
+
+【rwx】分别在目录和文件中表示
+r  目录  ls   文件 cat vi more
+w  目录 创建文件    文件 vi 
+x  目录 进入目录   文件 执行
+
+
+- find 
+find 在哪找 -name 文件名
+
+压缩包
+Windows  rar zip
+Linux    tar.gz  zip
+
+【源代码安装】
+“-z” : 同时用gzip压缩
+
+“-j” : 同时用bzip2压缩
+
+“-x” : 解包或者解压缩
+
+“-t” : 查看tar包里面的文件
+
+“-c” : 建立一个tar包或者压缩文件包
+
+“-v” : 可视化
+
+“-f” : 后面跟文件名，压缩时跟 “-f 文件名”，意思是压缩后的文件名为filename, 
+解压时跟 “-f 文件名”，意思是解压filename. 请注意，如果是多个参数组合的情况下带有 “-f”，请把 “-f” 写到最后面。
+
+压缩打包 tar -cvfz test.tar.gz  文件或目录
+解压缩   tar -zxvf test.tar.gz
+
+[编译]
+- redis-server 绿色可执行文件
+
+./configure && make && make test && make install
+
+./configure --prefix=/usr/local/libevent-2.0.21-stable   安装前配置 --prefix指明安装目录
+
+# /usr/local/memcached/bin/memcached -d -m 1028 -p 11211 -u root 
+
+
+【安装memcache】
+1、wget https://memcached.org/files/memcached-1.5.12.tar.gz
+2、tar -zxvf memcached-1.5.12.tar.gz
+3、./configure
+
+报错 缺少libevent库
+wget https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz
+tar -zxvf libevent-2.0.21-stable.tar.gz
+./configure --prefix=/usr/local/libevent-2.0.21-stable 
+make
+make install
+
+4、cd memcached-1.5.12
+./configure -with-libevent=/usr/local/libevent-2.0.21-stable/ --prefix=/usr/local/memcached
+
+make
+make install
+
+--prefix 指明安装路径
+
+5、运行memcache
+/usr/local/memcached/bin/memcached -d -m 1028 -p 11211 -u root 
+
+-d 后台运行
+-m 提供多大内存
+-p 开放端口
+-u 哪个用户启动
+
+6、查看进程
+ps -aux | grep memcached
+
+
+7、使用memcache
+http://www.runoob.com/memcached/memcached-connection.html
+telnet 127.0.0.1 11211     连接本地主机的11211端口
+
+
+[查看ip]
+ip addr 
+ifconfig  
+yum -y install net-tools
+
+./configure --enable-so --enable-deflate --enable-ssl --enable-rewrite
+
+
+yum -y install vim
+
+命令模式 :/搜索的关键字
+1 yy p
+
+systemctl stop firewalld 禁用
+systemctl start firewalld 启动
+systemctl status firewalld 查看状态
+syetemctl disable firewalld 停止
+
+ ls | grep rewrite
+ 
+[查看一个进程] 
+ps -aux | grep nginx
+
+查看一个端口的使用情况
+netstat -lnp | grep 80
+
+
+
+
+
+

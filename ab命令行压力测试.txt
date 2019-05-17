@@ -1,0 +1,26 @@
+参考网址：https://www.cnblogs.com/yueminghai/p/6412254.html
+
+
+测试并发：
+demo
+	ab -c 10 -n 100 http://192.168.0.252:8088/
+	-c  10  表示并发用户数为10
+	-n 100  表示请求总数为100
+主要查看
+Failed requests:  0    ：失败请求数必须为0且页面正常显示，延迟在用户接受范围才算并发量
+
+测试写入：
+demo：
+	ab -c 10 -n 100 -p post.txt -T application/x-www-form-urlencoded http://192.168.0.252:8088/ab.php
+	post.txt：json数据（使用urlencode()）
+	-T application/x-www-form-urlencoded 请求头
+	http://192.168.0.252:8088/ab.php具体页面
+
+
+
+
+
+
+
+
+

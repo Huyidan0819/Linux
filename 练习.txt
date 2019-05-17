@@ -1,0 +1,42 @@
+用户 a1 a2 a3
+在根目录下 创建 daniu.html
+a1 a2 可以 查看 daniu.html
+a1 可以编辑daniu.html
+a3 不能查看daniu.html
+
+-->新建三个用户
+	useradd usera1
+	useradd usera2
+	useradd usera3
+-->在 / 目录下新建文件 daniu.html
+--------->当前daniu.html文件详情：
+	-rw-r--r--. 1 root root  13 3月  26 21:44 daniu.html
+
+-->更改 文件 daniu.html 的所有者 为 usera1
+	chomd usera1 daniu.html
+--------->当前daniu.html文件详情：
+	-rw-r--r--. 1 usera1 root  13 3月  26 21:44 daniu.html
+-->更改 文件 daniu.html 的所有组 为 usera2
+	chgrp usera2 daniu.html
+--------->当前daniu.html文件详情：
+	-rw-r--r--. 1 usera1 usera2  13 3月  26 21:44 daniu.html
+
+-->更改权限(设置为 其他人:rwx ===  ---)
+	chmod o-r daniu.html
+--------->当前daniu.html文件详情：
+	-rw-r-----. 1 usera1 usera2 13 3月  26 21:44 daniu.html
+
+既：达成【
+	a1 a2 可以 查看 daniu.html
+	a1 可以编辑daniu.html
+	a3 不能查看daniu.html
+】
+
+
+
+
+在根目录下 创建 daniu目录
+
+a1 a2 可以 进入
+a1 可以创建文件 a2不能
+a3 不能进入
